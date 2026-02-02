@@ -58,7 +58,7 @@ src/
 
 ## 🧑‍💻 Code Examples :
 
-#### Code 1 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+#### Code 1 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/user.ts#L7-L65)) :
 
 ```javascript
 ### src/graphql/resolvers
@@ -86,7 +86,7 @@ For example `Code 1`, I picked this resolver function definition.
 - For the dataloaders, we `userLoader` and `postLoader` that contains the `prisma` client and `cache` storing and invalidation logics for our `prisma models` / data.
 - Lastly we have `USER_RESOLVER_MESSAGES`, which is constants where we defined the messages for our graphql response.
 
-#### Code 2 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+#### Code 2 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/lib/cachemap/lru.ts#L3-L37)) :
 ```javascript
 ### @lib/cachemap
 class LRUNode<K, V> {
@@ -121,8 +121,30 @@ export class LRUCache<K, V> {
     this.head.prev = this.tail;
   }
 }
-````
+```
 
+```javascript
+export function HandleErrors(): MethodDecorator {
+  return function (_target: object, _propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = async function (...args: unknown[]) {
+      try {
+        return await originalMethod.apply(this, args);
+      } catch (err: unknown) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          const errorMessage = PRISMA_ERRORS[err.code];
+          if (errorMessage) {
+            throw new Error(errorMessage);
+          }
+        }
+        throw err;
+      }
+    };
+    return descriptor;
+  };
+}
+```
 
 #### Code 3 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
 ```javascript
