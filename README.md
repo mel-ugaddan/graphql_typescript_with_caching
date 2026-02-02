@@ -56,9 +56,12 @@ src/
   - `mapPostsWithAuthors(): User[]` - Group `Posts` by `authorid` then assign to each `User`
 * `validations/` - Contains the validation schema using `Zod`.
 
-#### Example Code ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+## 🧑‍💻 Code Examples :
+
+#### Code 1 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
 
 ```javascript
+### src/graphql/resolvers
 export const postResolvers: Resolvers = {
   Query: {
     post: ComposeResolver(
@@ -74,3 +77,108 @@ export const postResolvers: Resolvers = {
 };
 ```
 
+#### Code 2 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+```javascript
+### @lib/cachemap
+class LRUNode<K, V> {
+  key: K;
+  val: V | null;
+  prev: LRUNode<K, V> | null = null;
+  next: LRUNode<K, V> | null = null;
+  constructor(key: K, val: V | null) {
+    this.key = key;
+    this.val = val;
+  }
+}
+
+export class LRUCache<K, V> {
+  public capacity: number;
+  public cache: Map<K, LRUNode<K, V>>;
+  public tail: LRUNode<K, V>;
+  public head: LRUNode<K, V>;
+
+  constructor(capacity: number) {
+    if (capacity <= 0) {
+      throw new Error('Capacity must be greater than 0');
+    }
+
+    this.capacity = capacity;
+    this.cache = new Map();
+
+    this.tail = new LRUNode<K, V>(null as K, null as V);
+    this.head = new LRUNode<K, V>(null as K, null as V);
+
+    this.tail.next = this.head;
+    this.head.prev = this.tail;
+  }
+}
+````
+
+
+#### Code 3 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+```javascript
+### @lib/dataloaders
+
+export class PostDataLoader {
+  protected cachemap: PostCache;
+  protected repository: PrismaDelegates['post'];
+  protected prismaClient: PrismaClient;
+
+  constructor(prisma: PrismaClient, cache: PostCache) {
+    this.repository = prisma.post;
+    this.cachemap = cache;
+    this.prismaClient = prisma;
+  }
+
+  @HandleErrors()
+  async load(id: PostModelId): Promise<PostModel | null> {
+    if (this.cachemap.has(id)) return this.cachemap.get(id)!;
+
+    const queried_item = await this.repository.findUnique({
+      where: { id },
+    });
+
+    this.cachemap.set(id, queried_item);
+    return queried_item;
+  }
+}
+```
+
+#### Code 4 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+```javascript
+### @lib/validations
+const BaseUserInputSchema = z.object({
+  name: z.string().min(2).max(150),
+  bio: z.string().max(150).nullable().optional(),
+  age: z.number().max(150).int().positive(),
+}) satisfies z.ZodType<UserSafeCreateInput>;
+
+export const CreateUserInputSchema = BaseUserInputSchema;
+
+export const UpdateUserInputSchema = CreateUserInputSchema.partial()
+  .extend({
+    id: z.number().int().positive(),
+  })
+  .refine(
+    (data) => {
+      const { id, ...rest } = data;
+      return Object.keys(rest).length > 0;
+    },
+    {
+      message: VALIDATION_MESSAGES.provide_at_least_one_field,
+    }
+  ) satisfies z.ZodType<UserSafeUpdateInput>;
+```
+
+```javascript
+### @lib/types
+export type PostSafeCreateInput = Prisma.PostUncheckedCreateInput;
+export type PostSafeUpdateInput = Override<
+  Prisma.PostUncheckedUpdateInput, {authorId?: number;}
+>;
+export type UserSafeCreateInput = Prisma.UserCreateWithoutPostsInput;
+export type UserSafeUpdateInput = Prisma.UserUpdateWithoutPostsInput;
+
+export type PostModelId = PostModel['id'];
+export type UserModelId = UserModel['id'];
+```
