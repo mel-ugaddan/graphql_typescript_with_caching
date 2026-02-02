@@ -10,11 +10,11 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
 };
 
 export type AllPostQueryResponse = {
@@ -55,25 +55,31 @@ export type Mutation = {
   updateUser: UserMutationResponse;
 };
 
+
 export type MutationCreatePostArgs = {
   input: CreatePost;
 };
+
 
 export type MutationCreateUserArgs = {
   input: CreateUser;
 };
 
+
 export type MutationDeletePostArgs = {
   id: Scalars['Int']['input'];
 };
+
 
 export type MutationDeleteUserArgs = {
   id: Scalars['Int']['input'];
 };
 
+
 export type MutationUpdatePostArgs = {
   input: UpdatePost;
 };
+
 
 export type MutationUpdateUserArgs = {
   input: UpdateUser;
@@ -117,19 +123,15 @@ export type Query = {
   users?: Maybe<AllUserQueryResponse>;
 };
 
+
 export type QueryPostArgs = {
   id: Scalars['Int']['input'];
 };
 
+
 export type QueryUserArgs = {
   id: Scalars['Int']['input'];
 };
-
-export enum Role {
-  Admin = 'ADMIN',
-  Guest = 'GUEST',
-  User = 'USER',
-}
 
 export type UpdatePost = {
   authorId?: InputMaybe<Scalars['Int']['input']>;
@@ -175,17 +177,15 @@ export type UserWithPosts = {
   user?: Maybe<User>;
 };
 
+
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<
-  TResult,
-  TParent = Record<PropertyKey, never>,
-  TContext = Record<PropertyKey, never>,
-  TArgs = Record<PropertyKey, never>,
-> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -222,13 +222,7 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<
-  TResult,
-  TKey extends string,
-  TParent = Record<PropertyKey, never>,
-  TContext = Record<PropertyKey, never>,
-  TArgs = Record<PropertyKey, never>,
-> =
+export type SubscriptionResolver<TResult, TKey extends string, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
@@ -238,26 +232,21 @@ export type TypeResolveFn<TTypes, TParent = Record<PropertyKey, never>, TContext
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (
-  obj: T,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<
-  TResult = Record<PropertyKey, never>,
-  TParent = Record<PropertyKey, never>,
-  TContext = Record<PropertyKey, never>,
-  TArgs = Record<PropertyKey, never>,
-> = (
+export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
+
+
+
+
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -273,7 +262,6 @@ export type ResolversTypes = {
   PostQueryResponse: ResolverTypeWrapper<PostQueryResponse>;
   PostWithAuthor: ResolverTypeWrapper<PostWithAuthor>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
-  Role: Role;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdatePost: UpdatePost;
   UpdateUser: UpdateUser;
@@ -306,81 +294,28 @@ export type ResolversParentTypes = {
   UserWithPosts: UserWithPosts;
 };
 
-export type AuthDirectiveArgs = {
-  requires?: Maybe<Role>;
-};
-
-export type AuthDirectiveResolver<
-  Result,
-  Parent,
-  ContextType = GraphQLContext,
-  Args = AuthDirectiveArgs,
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type AllPostQueryResponseResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['AllPostQueryResponse'] = ResolversParentTypes['AllPostQueryResponse'],
-> = {
+export type AllPostQueryResponseResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['AllPostQueryResponse'] = ResolversParentTypes['AllPostQueryResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<Array<ResolversTypes['PostWithAuthor']>>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
-export type AllUserQueryResponseResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['AllUserQueryResponse'] = ResolversParentTypes['AllUserQueryResponse'],
-> = {
+export type AllUserQueryResponseResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['AllUserQueryResponse'] = ResolversParentTypes['AllUserQueryResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<Array<ResolversTypes['UserWithPosts']>>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
-export type MutationResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
-> = {
-  createPost?: Resolver<
-    ResolversTypes['PostMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreatePostArgs, 'input'>
-  >;
-  createUser?: Resolver<
-    ResolversTypes['UserMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateUserArgs, 'input'>
-  >;
-  deletePost?: Resolver<
-    ResolversTypes['PostMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeletePostArgs, 'id'>
-  >;
-  deleteUser?: Resolver<
-    ResolversTypes['UserMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteUserArgs, 'id'>
-  >;
-  updatePost?: Resolver<
-    ResolversTypes['PostMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdatePostArgs, 'input'>
-  >;
-  updateUser?: Resolver<
-    ResolversTypes['UserMutationResponse'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateUserArgs, 'input'>
-  >;
+export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createPost?: Resolver<ResolversTypes['PostMutationResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'input'>>;
+  createUser?: Resolver<ResolversTypes['UserMutationResponse'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
+  deletePost?: Resolver<ResolversTypes['PostMutationResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
+  deleteUser?: Resolver<ResolversTypes['UserMutationResponse'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  updatePost?: Resolver<ResolversTypes['PostMutationResponse'], ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'input'>>;
+  updateUser?: Resolver<ResolversTypes['UserMutationResponse'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
 
-export type PostResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post'],
-> = {
+export type PostResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   authorId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -389,84 +324,50 @@ export type PostResolvers<
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
-export type PostMutationResponseResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['PostMutationResponse'] = ResolversParentTypes['PostMutationResponse'],
-> = {
+export type PostMutationResponseResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PostMutationResponse'] = ResolversParentTypes['PostMutationResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
-export type PostQueryResponseResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['PostQueryResponse'] = ResolversParentTypes['PostQueryResponse'],
-> = {
+export type PostQueryResponseResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PostQueryResponse'] = ResolversParentTypes['PostQueryResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
-export type PostWithAuthorResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['PostWithAuthor'] = ResolversParentTypes['PostWithAuthor'],
-> = {
+export type PostWithAuthorResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PostWithAuthor'] = ResolversParentTypes['PostWithAuthor']> = {
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
 };
 
-export type QueryResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
-> = {
-  post?: Resolver<
-    Maybe<ResolversTypes['PostQueryResponse']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryPostArgs, 'id'>
-  >;
+export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  post?: Resolver<Maybe<ResolversTypes['PostQueryResponse']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
   posts?: Resolver<ResolversTypes['AllPostQueryResponse'], ParentType, ContextType>;
-  user?: Resolver<
-    Maybe<ResolversTypes['UserQueryResponse']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryUserArgs, 'id'>
-  >;
+  user?: Resolver<Maybe<ResolversTypes['UserQueryResponse']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Maybe<ResolversTypes['AllUserQueryResponse']>, ParentType, ContextType>;
 };
 
-export type UserResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User'],
-> = {
+export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   age?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
-export type UserMutationResponseResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['UserMutationResponse'] = ResolversParentTypes['UserMutationResponse'],
-> = {
+export type UserMutationResponseResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['UserMutationResponse'] = ResolversParentTypes['UserMutationResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
-export type UserQueryResponseResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['UserQueryResponse'] = ResolversParentTypes['UserQueryResponse'],
-> = {
+export type UserQueryResponseResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['UserQueryResponse'] = ResolversParentTypes['UserQueryResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<ResolversTypes['UserWithPosts']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
-export type UserWithPostsResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends ResolversParentTypes['UserWithPosts'] = ResolversParentTypes['UserWithPosts'],
-> = {
+export type UserWithPostsResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['UserWithPosts'] = ResolversParentTypes['UserWithPosts']> = {
   posts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
@@ -486,6 +387,3 @@ export type Resolvers<ContextType = GraphQLContext> = {
   UserWithPosts?: UserWithPostsResolvers<ContextType>;
 };
 
-export type DirectiveResolvers<ContextType = GraphQLContext> = {
-  auth?: AuthDirectiveResolver<any, any, ContextType>;
-};

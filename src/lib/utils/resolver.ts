@@ -14,8 +14,8 @@ export type ResolverResponse<T> = {
  * * getRequestedFields() - Extract requested fields from resolver info.
  * * validateOrThrow() - Zod Validation
  * * formatResponse() - Response Formatter
- * * groupPostsByUser() - Assigning `User` / Author to each `Posts`
- * * mapPostsWithAuthors() - Group `Posts` by its `User`
+ * * groupPostsByUser(): Post[]  - Assigning `User` / Author to each `Posts`
+ * * mapPostsWithAuthors(): User[] - Group `Posts` by `authorid` then assign to each `User`
  */
 export class ResolverUtils {
   /**
