@@ -1,0 +1,108 @@
+type User {
+  id: Int
+  name: String
+  bio: String
+  age: Int
+}
+
+input CreateUser {
+  name: String!
+  bio: String
+  age: Int!
+}
+
+input UpdateUser {
+  id: Int!
+  name: String
+  bio: String
+  age: Int
+}
+
+type Post {
+  id: Int
+  title: String
+  content: String
+  description: String
+  published: Boolean
+  authorId: Int
+}
+
+input CreatePost {
+  title: String!
+  content: String!
+  authorId: Int!
+  description: String
+  published: Boolean
+}
+
+input UpdatePost {
+  id: Int!
+  title: String
+  content: String
+  authorId: Int
+  description: String
+  published: Boolean
+}
+
+type PostWithAuthor {
+  post: Post
+  author: User
+}
+
+type UserWithPosts {
+  user: User
+  posts: [Post!]
+}
+
+type PostMutationResponse {
+  result: Post
+  success: Boolean!
+  message: String!
+}
+
+type UserMutationResponse {
+  result: User
+  success: Boolean!
+  message: String!
+}
+
+type PostQueryResponse {
+  result: Post
+  success: Boolean!
+  message: String!
+}
+
+type UserQueryResponse {
+  result: UserWithPosts
+  success: Boolean!
+  message: String!
+}
+
+type AllUserQueryResponse {
+  result: [UserWithPosts!]
+  success: Boolean!
+  message: String!
+}
+
+type AllPostQueryResponse {
+  result: [PostWithAuthor!]
+  success: Boolean!
+  message: String!
+}
+
+type Mutation {
+  createUser(input: CreateUser!): UserMutationResponse!
+  updateUser(input: UpdateUser!): UserMutationResponse!
+  deleteUser(id: Int!): UserMutationResponse!
+
+  createPost(input: CreatePost!): PostMutationResponse!
+  updatePost(input: UpdatePost!): PostMutationResponse!
+  deletePost(id: Int!): PostMutationResponse!
+}
+
+type Query {
+  user(id: Int!): UserQueryResponse
+  users: AllUserQueryResponse
+  post(id: Int!): PostQueryResponse
+  posts: AllPostQueryResponse!
+}

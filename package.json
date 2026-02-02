@@ -1,0 +1,50 @@
+{
+  "name": "simple_graphql",
+  "version": "1.0.0",
+  "description": "This is practice for Graphql ",
+  "license": "ISC",
+  "author": "Meljohn Ugaddan",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "default": "./index.js"
+    }
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx --watch src/index.ts",
+    "generate": "graphql-codegen",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^6.1.0",
+    "@graphql-codegen/typescript": "^5.0.7",
+    "@graphql-codegen/typescript-resolvers": "^5.1.5",
+    "@types/node": "^25.0.3",
+    "@types/pg": "^8.16.0",
+    "graphql-codegen-typescript-validation-schema": "^0.18.1",
+    "ts-node": "^10.9.2",
+    "ts-to-zod": "^5.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@apollo/server": "^5.2.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.3.0",
+    "apollo-server-express": "^3.13.0",
+    "dotenv": "^17.2.3",
+    "graphql": "^16.12.0",
+    "graphql-codegen-zod": "^1.10.6",
+    "ioredis": "^5.8.2",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.16.3",
+    "prisma": "^7.3.0",
+    "redis": "^5.10.0",
+    "tiny-lru": "^11.4.5",
+    "yup": "^1.7.1",
+    "zod": "^4.3.6"
+  }
+}
