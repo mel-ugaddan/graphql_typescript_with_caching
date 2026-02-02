@@ -62,20 +62,29 @@ src/
 
 ```javascript
 ### src/graphql/resolvers
-export const postResolvers: Resolvers = {
+const userResolvers: Resolvers = {
   Query: {
-    post: ComposeResolver(
+    user: ComposeResolver(
       async (_parent, args, context, info) => {
-        let return_val;
-        ....
-        # perform fetching
-        ....
-        return ResolverUtils.formatResponse(return_val, POST_RESOLVER_MESSAGES.fetch_post_success);
+        const user = await context.dataloaders.userLoader.load(args.id);
+        if (!user) return null;
+        const requested_fields = ResolverUtils.getRequestedFields(info);
+        if (requested_fields.has('posts')) {
+          const posts = await context.dataloaders.postLoader.getAllUserPosts(args.id);
+          return ResolverUtils.formatResponse({ user, posts }, USER_RESOLVER_MESSAGES.fetch_user_w_posts_success);
+        }
+        return ResolverUtils.formatResponse({ user }, USER_RESOLVER_MESSAGES.fetch_user_success);
       },
       [ExceptionHandler]
     )
 };
 ```
+
+For example `Code 1`, I picked this resolver function definition. 
+- As we see, `user` resolver is wrapped with `ComposeResolver`, allowing us to separate logic concerns such as error handling and can further logic such as resolver-level authentication as improvements. The first argument represents the actual resolver implementation (data fetching, caching, etc.), while the second argument is an array of middleware-like functions (e.g., `ExceptionHandler`) that are executed around the resolver.
+- Next we have our `ResolverUtils` : `ResolverUtils.getRequestedFields(info)` inspects the GraphQL query to determine which fields were requested by the client mitigating N + 1 problem when querying `posts` for our users, reducing I/O latency from our backend service to database server as we request more data. For  `ResolverUtils.formatResponse(...)`, this is our helper function to format our graphql response.
+- For the dataloaders, we `userLoader` and `postLoader` that contains the `prisma` client and `cache` storing and invalidation logics for our `prisma models` / data.
+- Lastly we have `USER_RESOLVER_MESSAGES`, which is constants where we defined the messages for our graphql response.
 
 #### Code 2 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
 ```javascript
