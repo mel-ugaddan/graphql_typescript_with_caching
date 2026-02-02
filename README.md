@@ -34,3 +34,24 @@ src/
 │   ├── utils/
 │   └── validations/
 └── index.ts
+```
+
+
+#### Example Code : 
+
+```javascript
+export const postResolvers: Resolvers = {
+  Query: {
+    post: ComposeResolver(
+      async (_parent, args, context, info) => {
+        let return_val;
+        ....
+        .... #### perform fetching
+        ....
+        return ResolverUtils.formatResponse(return_val, POST_RESOLVER_MESSAGES.fetch_post_success);
+      },
+      [ExceptionHandler]
+    )
+};
+```
+
