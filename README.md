@@ -36,8 +36,13 @@ src/
 └── index.ts
 ```
 
+📂 `graphql/`
+* `resolvers/` - Contains GraphQL resolver functions that implement the logic for queries and mutations. Example: fetching users, posts, or handling mutations like creating/updating posts.
+* `schema/` - Holds your GraphQL schema definition files (.graphql) or typeDefs. Defines types, queries, mutations, and relationships in your API.
+* `context/` - Provides the GraphQL context, such as database clients, caching layers, and user authentication info. This context is accessible in all resolvers.
 
-#### Example Code : 
+
+#### Example Code ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
 
 ```javascript
 export const postResolvers: Resolvers = {
@@ -46,7 +51,7 @@ export const postResolvers: Resolvers = {
       async (_parent, args, context, info) => {
         let return_val;
         ....
-        .... #### perform fetching
+        # perform fetching
         ....
         return ResolverUtils.formatResponse(return_val, POST_RESOLVER_MESSAGES.fetch_post_success);
       },
