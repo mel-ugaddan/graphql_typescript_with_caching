@@ -1,4 +1,4 @@
-# GraphQL Backend Service - User-Post with Caching Architecture Example Project
+# GraphQL Backend Service - User-Post with In-memory Caching Project
 
 This repository demonstrates how I professionally will structure a GraphQL project, using a simple `User–Post` use case.  
 It focuses on clean architecture, `Decorator` patterns for `middlewares` like error handling (DRY Principle), resolver design, and efficient data fetching patterns.
@@ -233,3 +233,9 @@ export type UserSafeUpdateInput = Prisma.UserUpdateWithoutPostsInput;
 export type PostModelId = PostModel['id'];
 export type UserModelId = UserModel['id'];
 ```
+
+For this last example, I use `Zod` for validation, one of the most well-known alternatives to `Yup`.
+I treat Prisma’s generated types as the single source of truth and use them as the basis for my `Zod` `schemas`.
+This guarantees strong type safety for both `create` and `update` prisma `operations`, ensuring that runtime validation and compile-time types stay perfectly aligned.
+
+**Closing Statement** : I built this repository as a TypeScript-focused backend project to showcase how I approach clean code, strong type safety, and backend design. The structure reflects my experience as a Software Engineer and patterns I’ve applied while working within collaborative engineering teams. I emphasize maintainability and developer experience throughout the codebase.
