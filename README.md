@@ -168,7 +168,6 @@ export class PostDataLoader {
 
 }
 ```
-
 ```javascript
 export function HandleErrors(): MethodDecorator {
   return function (_target: object, _propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
@@ -191,7 +190,10 @@ export function HandleErrors(): MethodDecorator {
   };
 }
 ```
-
+For `Code 3` we have the exact custom `Dataloader` code which is directly inspired from the `graphql/dataloader` npm package. For this project I directly 
+created a simple class without the same complexity of from the original package where it uses extra properties like `batchLoadFn` and other method properties.
+Furthermore, I hardly find it difficult to customize such package and ending up having unsafe `type` scenarios. Furthermore on this codeblocks, I define a 
+method decorator `HandleErrors` to handle `prisma` errors when we do `query` and `mutations`.
 
 #### Code 4 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
 ```javascript
