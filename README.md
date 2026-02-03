@@ -1,4 +1,4 @@
-# GraphQL Caching Architecture Example
+# GraphQL Backend Service - User-Post with Caching Architecture Example Project
 
 This repository demonstrates how I professionally will structure a GraphQL project, using a simple `User–Post` use case.  
 It focuses on clean architecture, `Decorator` patterns for `middlewares` like error handling (DRY Principle), resolver design, and efficient data fetching patterns.
