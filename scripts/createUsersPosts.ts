@@ -1,4 +1,4 @@
-import { prisma } from '../src/lib/prisma';
+import { prisma } from '@lib/prisma';
 import type { UserCreateInput, PostUncheckedCreateInput } from '@lib/types/generated/prisma/models';
 
 function randomInt(min: number, max: number): number {

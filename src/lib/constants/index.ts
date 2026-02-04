@@ -30,3 +30,8 @@ export const VALIDATION_MESSAGES = {
 
 export const USER_CACHE_LIMIT = 100;
 export const POST_CACHE_LIMIT = 100;
+
+export const REDIS_CACHE_PREFIX = {
+  user: `user`,
+  post: `post`,
+};

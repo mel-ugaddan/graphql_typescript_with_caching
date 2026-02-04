@@ -1,8 +1,8 @@
-import type { PostModel, UserModel } from './generated/prisma/models.ts';
-import type { Prisma } from './generated/prisma/client.ts';
+import type { PostModel, UserModel } from '@lib/types/generated/prisma/models.ts';
+import type { Prisma } from '@lib/types/generated/prisma/client.ts';
 
-export type * from './generated/prisma/client';
-export type * from './generated/prisma/models';
+export type * from '@lib/types/generated/prisma/client';
+export type * from '@lib/types/generated/prisma/models';
 
 type Override<T, R> = Omit<T, keyof R> & R;
 
