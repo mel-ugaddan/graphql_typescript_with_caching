@@ -1,4 +1,6 @@
 import { redis } from '@lib/redis';
+import { RedisCache } from '@lib/redis';
+import { REDIS_CACHE_PREFIX } from '@lib/constants';
 
 export type UserModel = {
   id: number;
@@ -22,6 +24,8 @@ export async function getJson<T>(key: string): Promise<T | undefined> {
 }
 
 async function main(): Promise<void> {
+  const userclient = new RedisCache<UserModel>(redis, REDIS_CACHE_PREFIX.user);
+
   const user: UserModel = {
     id: 1,
     email: 'alice@example.com',
@@ -29,9 +33,9 @@ async function main(): Promise<void> {
     role: 'admin',
   };
 
-  await setJson<UserModel>(`user:${user.id}`, user, 3600);
+  await userclient.set(user.id, user);
 
-  const cached_user1 = await getJson<UserModel>(`user:${user.id}`);
+  const cached_user1 = await await userclient.get(user.id);
 
   if (cached_user1) {
     console.log('User1:', cached_user1);
@@ -39,7 +43,7 @@ async function main(): Promise<void> {
     console.log('User1:', cached_user1);
   }
 
-  const cached_user2 = await getJson<UserModel>(`user:${2}`);
+  const cached_user2 = await await userclient.get(2);
 
   if (cached_user2) {
     console.log('User2:', cached_user2);
