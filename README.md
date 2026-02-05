@@ -41,10 +41,10 @@ src/
 * `schema/` - Holds your GraphQL schema definition files (.graphql) or typeDefs. Defines types, queries, mutations, and relationships in your API.
 * `context/` - Provides the GraphQL context, that contains the dataloader clients, caching layers, and user authentication info. This context is accessible in all resolvers.
 
-📂 `lib/` – Core Library Utilities
-*  `cachemap/` - Contains caching mechanisms, such as  LRU caches , to optimize repeated data fetching and prevent N+1 query issues. I wrote a custom LRU cache using doubly-linked list ( A well-known leetcode problem ).
+📂 `lib/` – Core Library Utilities. Most of the backend codes are under here.
+* `cachemap/` - Contains caching mechanisms, such as  LRU caches , to optimize repeated data fetching and prevent N+1 query issues (Reducing I/O Load). I wrote a custom LRU cache using doubly-linked list ( A well-known leetcode problem ).
 * `constants/` - Holds constant values and messages used across the project, such as resolver success/error messages, configuration keys such as cache item limit, and status codes. **Example use:** `POST_RESOLVER_MESSAGES.fetch_post_success`.
-* `dataloaders/` - Implements **DataLoader utilities** for batching and caching database requests efficiently. This helps reduce the number of queries when resolving fields like `User.posts`.
+* `dataloaders/` - Implements **DataLoader utilities** for batching and caching database requests efficiently. This helps reduce the number of queries when resolving fields like `User.posts` e.g. User with many posts (1-to-many).
 * `middlewares/` - Reusable middleware functions for GraphQL resolvers and dataloaders. For now it is Error handling using `decorators`.
 * `prisma/` - Contains prisma client setup.  
 * `types/` - Contains both Custom Type-safe and Generated types and interfaces for:  GraphQL context, Resolver arguments and responses and Prisma models. **Purpose:** maintain type safety and improve developer experience.
@@ -85,8 +85,8 @@ const userResolvers: Resolvers = {
 };
 ```
 
-For example `Code 1`, I picked this resolver function definition. 
-- As we see, `user` resolver is wrapped with `ComposeResolver`, allowing us to separate logic concerns such as error handling and can further logic such as resolver-level authentication as improvements. The first argument represents the actual resolver implementation (data fetching, caching, etc.), while the second argument is an array of middleware-like functions (e.g., `ExceptionHandler`) that are executed around the resolver.
+For example `Code 1`, I pick the `userResolvers` resolver function definition. 
+- As shown, the user resolver is wrapped with `ComposeResolver`, which allows us to separate concerns such as error handling and enables future enhancements like resolver-level `authentication` and `authorization`. The first argument represents the core resolver implementation (e.g., data fetching, caching), while the second argument is an array of middleware-like functions (such as `ExceptionHandler`) that execute around the resolver. This middleware mechanism can be extended to include `authentication`, `authorization`, Grafana `logging`, and other cross-cutting concerns, helping reduce code duplication and keeping the codebase clean and maintainable.
 - Next we have our `ResolverUtils` : `ResolverUtils.getRequestedFields(info)` inspects the GraphQL query to determine which fields were requested by the client mitigating N + 1 problem when querying `posts` for our users, reducing I/O latency from our backend service to database server as we request more data. For  `ResolverUtils.formatResponse(...)`, this is our helper function to format our graphql response.
 - For the dataloaders, we `userLoader` and `postLoader` that contains the `prisma` client and `cache` storing and invalidation logics for our `prisma models` / data.
 - Lastly we have `USER_RESOLVER_MESSAGES`, which is of one of the constants where we defined the messages for our graphql response.
@@ -238,4 +238,4 @@ For this last example, I use `Zod` for validation, one of the most well-known al
 I treat Prisma’s generated types as the single source of truth and use them as the basis for my `Zod` `schemas`.
 This guarantees strong type safety for both `create` and `update` prisma `operations`, ensuring that runtime validation and compile-time types stay perfectly aligned.
 
-**Closing Statement** : I built this repository as a TypeScript-focused backend project to showcase how I approach clean code, strong type safety, and backend design. The structure reflects my experience as a Software Engineer and patterns I’ve applied while working within collaborative engineering teams. I emphasize maintainability and developer experience throughout the codebase.
+**Closing Statement** : I built this repository as a TypeScript backend-focused project to showcase how I approach `clean` code, strong type safety, and backend design (Mainly GraphQL). The structure reflects my experience as a Software Engineer and patterns I’ve applied and encountered while working within collaborative engineering teams. I emphasize maintainability and developer experience throughout the codebase. Feel free to browse the whole code :D
