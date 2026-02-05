@@ -91,7 +91,7 @@ For example `Code 1`, I picked this resolver function definition.
 - For the dataloaders, we `userLoader` and `postLoader` that contains the `prisma` client and `cache` storing and invalidation logics for our `prisma models` / data.
 - Lastly we have `USER_RESOLVER_MESSAGES`, which is of one of the constants where we defined the messages for our graphql response.
 
-#### Code 2 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/lib/cachemap/lru.ts#L3-L37)) :
+#### Code 2 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/lib/cachemap/lru.ts#L3-L230)) :
 ```javascript
 ### @lib/cachemap
 class LRUNode<K, V> {
@@ -135,7 +135,7 @@ export class LRUCache<K, V> {
 For `Code 2`, this code is just the typical Data-structure doubly-linked list algorithm LRU style with Typescript sprinklings. This is the In-memory caching 
 algorithm I used for this project.
 
-#### Code 3 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+#### Code 3 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/lib/dataloaders/user.ts#L6-L99)) :
 ```javascript
 ### @lib/dataloaders
 
@@ -195,7 +195,7 @@ created a simple class without the same complexity of from the original package 
 Furthermore, I hardly find it difficult to customize such package and ending up having unsafe `type` scenarios. Furthermore on this codeblocks, I define a 
 method decorator `HandleErrors` to handle `prisma` errors when we do `query` and `mutations`.
 
-#### Code 4 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/graphql/resolvers/post.ts#L7-L65)) :
+#### Code 4 ([source](https://github.com/mel-ugaddan/graphql_typescript_with_caching/blob/main/src/lib/validations/index.ts#L5-L49)) :
 ```javascript
 ### @lib/validations
 const BaseUserInputSchema = z.object({
